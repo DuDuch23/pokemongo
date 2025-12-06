@@ -18,10 +18,10 @@ const getPokemonByName = async(name) => {
 }
 
 const displayPokemon = (pokemonData, pokemonsList) => {
-    pokemonsList.appendChild(itemPokemon);
     const itemPokemon = document.createElement('div');
     const namePokemon = document.createElement('h3');
     const containerSpritePokemon = document.createElement('div');
+
     containerSpritePokemon.classList.add('container-sprites');
     
     itemPokemon.appendChild(namePokemon);
@@ -51,6 +51,7 @@ const getPokemonByScroll = async(offset, limit) => {
     for (const pokemon of data.results) {
         try{
             const pokemonData = await getPokemonByName(pokemon.name);
+            console.log(pokemonData);
             displayPokemon(pokemonData, pokemonsList);
         } catch(error){
             console.error('Erreur avec le pokemon ', pokemon.name);
