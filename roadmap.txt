@@ -1,0 +1,7 @@
+- Bouton Commencer à jouer qui fait apparaître le jeu
+- Faire apparaître des pokémons aléatoirement
+- Capturer des pokémons (en premier lors d'un clic) et les stockers en localstorage
+    - Le faire disparaître de la map
+- (Après la capture au clic) lancer un combat au clic pour le capturer ou le tuer
+    - Le faire disparaître de la map après le combat
+- (BONUS) Mapper différents endroits du monde réel et les liées à des endroits de pokémon (exemple : un champ dans le monde réel signifie une plaine dans pokémon)
