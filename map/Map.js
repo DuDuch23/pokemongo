@@ -1,7 +1,27 @@
 import { randomSpawnPokemon } from "./Spawn.js";
+import { setSpawnedPokemons } from "../store/SpawnStore.js";
+
+export function loadGoogleMaps() {
+    return new Promise((resolve, reject) => {
+        // Déjà chargé ?
+        if (window.google && window.google.maps) {
+            resolve();
+            return;
+        }
+
+        const script = document.createElement("script");
+        script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCaAD8gCoK4nlXMxQS6nn6kP-L30kxHlBc";
+        script.async = true;
+        script.defer = true;
+
+        script.onload = () => resolve();
+        script.onerror = () => reject("Erreur chargement Google Maps");
+
+        document.head.appendChild(script);
+    });
+}
 
 export function initMap() {
-
     function handleSuccess(position) {
         const centre = {
             lat: position.coords.latitude,
@@ -13,36 +33,23 @@ export function initMap() {
     function handleError(error) {
         console.warn("Erreur de géolocalisation :", error);
 
-        const fallbackPosition = {
+        loadMap({
             lat: 48.8566,
             lng: 2.3522
-        };
-
-        loadMap(fallbackPosition);
+        });
     }
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(handleSuccess, handleError);
-    } else {
-        handleError();
-    }
+    navigator.geolocation
+        ? navigator.geolocation.getCurrentPosition(handleSuccess, handleError)
+        : handleError();
 }
 
-// Fonction qui initialise réellement la map
-function loadMap(centre) {
+export async function loadMap(centre) {
     const map = new google.maps.Map(document.getElementById("map"), {
         zoom: 12,
         center: centre,
     });
 
-    new google.maps.Marker({
-        position: centre,
-        map: map,
-        title: "Position détectée"
-    });
-
-    // 🎯 Spawn autour de la position récupérée (GPS ou fallback)
-    randomSpawnPokemon(map, centre);
+    const pokemons = await randomSpawnPokemon(map, centre);
+    setSpawnedPokemons(pokemons);
 }
-
-window.initMap = initMap;
