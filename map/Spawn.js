@@ -1,11 +1,11 @@
 import { getPokemonById, getPokemonSpecies } from "../api/Api.js";
 import { musicFight } from "../features/BackgroundMusic.js";
+import { capturePokemon } from "./CapturePokemon.js";
 
 export async function randomSpawnPokemon(map, centre) {
     const minSpawn = 400;
     const maxSpawn = 500;
-    const spawnCount =
-        Math.floor(Math.random() * (maxSpawn - minSpawn + 1)) + minSpawn;
+    const spawnCount = Math.floor(Math.random() * (maxSpawn - minSpawn + 1)) + minSpawn;
 
     console.log("Nombre de Pokémon à faire spawn :", spawnCount);
 
@@ -100,7 +100,7 @@ export async function randomSpawnPokemon(map, centre) {
                 const cry = document.getElementById("bg-crie-pokemon");
                 if (!cry) return;
 
-                cry.volume = 0.15;
+                cry.volume = 0.10;
                 cry.currentTime = 0;
                 cry.play();
             }, 5000);
@@ -109,13 +109,64 @@ export async function randomSpawnPokemon(map, centre) {
             document.getElementById("capture").addEventListener("click", () => {
                 pokemonSpawned.captured = true;
                 marker.setMap(null);
-                containerBattle.remove();
+                const battleActions = containerBattle.querySelector(".battle-actions");
+                console.log(battleActions);
+
+                battleActions.innerHTML = `
+                    <button class="victory">
+                        <p>${pokemonSpawned.nameFr} a été capturé avec succès <span>></span></p>
+                    </button>
+                `;
+
+                musicPlay.src = "victory.mp3";
+                musicPlay.volume = 0.05;
+                musicPlay.currentTime = 0;
+                musicPlay.play();
+
+                const victory = battleActions.querySelector(".victory");
+                console.log(victory);
+                victory.addEventListener("click", () => {
+                    containerBattle.remove();
+                    musicPlay.src = "004 New Bark Town.mp3";
+                    musicPlay.volume = 0.05;
+                    musicPlay.currentTime = 0;
+                    musicPlay.play();
+                });
+
+                capturePokemon(pokemonSpawned);
             });
 
             // Combat
             document.getElementById("fight").addEventListener("click", () => {
                 marker.setMap(null);
-                containerBattle.remove();
+                const battleActions = containerBattle.querySelector(".battle-actions");
+                console.log(battleActions);
+
+                musicPlay.src = "victory.mp3";
+                musicPlay.volume = 0.05;
+                musicPlay.currentTime = 0;
+                musicPlay.play();
+
+                battleActions.innerHTML = `
+                    <button class="victory">
+                        <p>${pokemonSpawned.nameFr} a été vaincu avec succès <span>></span></p>
+                    </button>
+                `;
+
+                musicPlay.src = "victory.mp3";
+                musicPlay.volume = 0.05;
+                musicPlay.currentTime = 0;
+                musicPlay.play();
+
+                const victory = battleActions.querySelector(".victory");
+                console.log(victory);
+                victory.addEventListener("click", () => {
+                    containerBattle.remove();
+                    musicPlay.src = "004 New Bark Town.mp3";
+                    musicPlay.volume = 0.05;
+                    musicPlay.currentTime = 0;
+                    musicPlay.play();
+                });
             });
         });
 
