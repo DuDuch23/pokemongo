@@ -10,7 +10,7 @@ export function loadGoogleMaps() {
         }
 
         const script = document.createElement("script");
-        script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBlHfvksI0HkIpDW6iAyDG2K5CyLDi6kZY";
+        script.src = "https://maps.googleapis.com/maps/api/js?key=cléapi";
         script.async = true;
         script.defer = true;
 

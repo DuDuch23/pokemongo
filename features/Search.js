@@ -33,5 +33,5 @@ export function initSearch(formsearch, pokemonsList){
                 pokemonsList.innerHTML = '<div class="error">Aucun résultat</div>';
             }
         }, 500);
-    })
+    })    
 }

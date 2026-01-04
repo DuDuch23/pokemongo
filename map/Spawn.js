@@ -3,8 +3,8 @@ import { musicFight } from "../features/BackgroundMusic.js";
 import { capturePokemon } from "./CapturePokemon.js";
 
 export async function randomSpawnPokemon(map, centre) {
-    const minSpawn = 400;
-    const maxSpawn = 500;
+    const minSpawn = 100;
+    const maxSpawn = 100;
     const spawnCount = Math.floor(Math.random() * (maxSpawn - minSpawn + 1)) + minSpawn;
 
     console.log("Nombre de Pokémon à faire spawn :", spawnCount);
@@ -33,7 +33,6 @@ export async function randomSpawnPokemon(map, centre) {
             lng: centre.lng + (Math.random() - 0.5) * 1
         };
 
-        // 📍 Création du marker
         const marker = new google.maps.Marker({
             position,
             map,
@@ -41,7 +40,6 @@ export async function randomSpawnPokemon(map, centre) {
             icon
         });
 
-        // 📦 Objet Pokémon
         const pokemonSpawned = {
             id: pokemon.id,
             nameFr: frenchName,
@@ -90,7 +88,7 @@ export async function randomSpawnPokemon(map, centre) {
             const musicPlay = document.getElementById("bg-music");
             const fightMusic = musicFight(pokemonSpawned);
 
-            musicPlay.src = `${fightMusic}`;
+            musicPlay.src = `./song/${fightMusic}`;
             musicPlay.volume = 0.05;
             musicPlay.currentTime = 0;
             musicPlay.play();
@@ -118,7 +116,7 @@ export async function randomSpawnPokemon(map, centre) {
                     </button>
                 `;
 
-                musicPlay.src = "victory.mp3";
+                musicPlay.src = "./song/victory.mp3";
                 musicPlay.volume = 0.05;
                 musicPlay.currentTime = 0;
                 musicPlay.play();
@@ -127,7 +125,7 @@ export async function randomSpawnPokemon(map, centre) {
                 console.log(victory);
                 victory.addEventListener("click", () => {
                     containerBattle.remove();
-                    musicPlay.src = "004 New Bark Town.mp3";
+                    musicPlay.src = "./song/004 New Bark Town.mp3";
                     musicPlay.volume = 0.05;
                     musicPlay.currentTime = 0;
                     musicPlay.play();
@@ -142,7 +140,7 @@ export async function randomSpawnPokemon(map, centre) {
                 const battleActions = containerBattle.querySelector(".battle-actions");
                 console.log(battleActions);
 
-                musicPlay.src = "victory.mp3";
+                musicPlay.src = "./song/victory.mp3";
                 musicPlay.volume = 0.05;
                 musicPlay.currentTime = 0;
                 musicPlay.play();
@@ -153,7 +151,7 @@ export async function randomSpawnPokemon(map, centre) {
                     </button>
                 `;
 
-                musicPlay.src = "victory.mp3";
+                musicPlay.src = "./song/victory.mp3";
                 musicPlay.volume = 0.05;
                 musicPlay.currentTime = 0;
                 musicPlay.play();
@@ -162,8 +160,8 @@ export async function randomSpawnPokemon(map, centre) {
                 console.log(victory);
                 victory.addEventListener("click", () => {
                     containerBattle.remove();
-                    musicPlay.src = "004 New Bark Town.mp3";
-                    musicPlay.volume = 0.05;
+                    musicPlay.src = "./song/004 New Bark Town.mp3";
+                    musicPlay.volume = 0.001;
                     musicPlay.currentTime = 0;
                     musicPlay.play();
                 });

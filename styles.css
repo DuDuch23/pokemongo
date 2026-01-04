@@ -1,8 +1,148 @@
+/* --- CONTAINER GLOBAL --- */
+.container-start-game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* --- PROF CHEN --- */
+.prof-chen {
+    width: 200px;
+    image-rendering: pixelated;
+}
+
+/* --- TEXTE / INTRO --- */
+.starter-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* --- CONTAINER DES STARTERS --- */
+.container-starter {
+    gap: 16px;
+    padding: 10px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+    height: 290px;
+    /* z-index: 111;
+    position: relative;
+    top: 540px; */
+}
+
+.accept-choice{
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 1);
+}
+
+.accept-choice p {
+    font-family: "Press Start 2P", monospace;
+    font-size: 10px;
+    color: white;
+}
+
+.container-btn-choice{
+    display: flex;
+    gap: 16px;
+}
+
+/* scrollbar discrète */
+.container-starter::-webkit-scrollbar {
+    height: 6px;
+}
+.container-starter::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+/* --- CARTE STARTER --- */
+.starter-card {
+    min-width: 120px;
+    background: #f8f8f8;
+    border: 3px solid #333;
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 200ms ease;
+    box-shadow: 0 4px 0 #333;
+}
+
+/* image */
+.starter-card img {
+    width: 80px;
+    height: 80px;
+    image-rendering: pixelated;
+}
+
+/* nom */
+.starter-card h3 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    margin-top: 8px;
+    text-transform: capitalize;
+}
+
+/* --- HOVER --- */
+.starter-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 0 #333;
+    background: #fff;
+}
+
+/* --- SÉLECTION --- */
+.starter-card.selected {
+    background: #ffe066;
+    border-color: #ff9800;
+    box-shadow: 0 0 15px rgba(255, 152, 0, 0.8);
+}
+
+/* --- BOUTON START --- */
+#start-game {
+    margin-top: 20px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    padding: 12px 20px;
+    background: #ff3d3d;
+    color: white;
+    border: 3px solid #000;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #000;
+}
+
+#start-game:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #000;
+}
+
+
 body{
     margin: 0;
     width: 100%;
     max-width: 1280px;
     margin: 0 auto;
+}
+
+.pitch-professeur-chen{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* position: fixed; */
+    width: 100%;
+    height: 100%;
 }
 
 form{
@@ -50,11 +190,11 @@ form input {
     justify-content: space-between;
 }
 #root{
-
+    height: 100vh;
 }
 
 #container-start-game{
-    position: fixed;
+    /* position: fixed; */
     width: 100%;
     height: 100%;
     display: flex;
@@ -62,11 +202,22 @@ form input {
     justify-content: center;
 }
 
-#container-start-game img{
-    position: absolute;
+.prof-chen{
+    /* position: absolute; */
     top: 200px;
     right: 200px;
     width: 155px;
+
+}
+
+.container-starter{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.starter-card img {
+    /* width: 50px;
+    height: 50px; */
 }
 
 #start-game{
