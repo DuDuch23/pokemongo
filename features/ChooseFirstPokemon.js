@@ -1,4 +1,4 @@
-import { getPokemonById, getPokemonByName } from "../api/Api.js";
+import { getPokemonData, getPokemonByName } from "../api/Api.js";
 import { init } from "../script.js";
 
 export function PitchProfessorChen(){
@@ -10,6 +10,13 @@ export function PitchProfessorChen(){
 
     const containerPitch = document.createElement('div');
     containerPitch.classList.add("pitch-professeur-chen");
+
+    const audioBegin = document.createElement('audio');
+    audioBegin.classList.add("audio-start");
+    audioBegin.src = "./song/003 An Adventure Begins!.mp3";
+    audioBegin.setAttribute("loop", true)
+    audioBegin.volume = 0.005;
+    audioBegin.play();
 
     const profChen = document.createElement('img');
     profChen.src = "professeur-chen.png";
@@ -23,6 +30,7 @@ export function PitchProfessorChen(){
 
     containerPitch.appendChild(profChen);
     containerPitch.appendChild(containerTextPitch);
+    containerPitch.appendChild(audioBegin);
 
     root.appendChild(containerPitch);
 
@@ -141,18 +149,21 @@ export async function ChooseFirstPokemon(){
             containerPitch.appendChild(containerAcceptChoice);
 
             // Equipe du joueur
-            let team = new Array();
+            // let team = new Array();
             const teamLocalstorage = localStorage.getItem("Equipe");
-            if (!teamLocalstorage) {
-                localStorage.setItem("Equipe", JSON.stringify(team));
+            // if (!teamLocalstorage) {
+            //     localStorage.setItem("Equipe", JSON.stringify(team));
+            // }
+
+            if (!localStorage.getItem("Equipe")) {
+                localStorage.setItem("Equipe", JSON.stringify([]));
             }
 
-            btnAccept.addEventListener('click', () => {
-                const teamLocal = JSON.parse(localStorage.getItem("Equipe"));
-                teamLocal.push({
-                    name: pokemon.name,
-                    data: pokemon,
-                });
+            btnAccept.addEventListener('click', async () => {
+                const pokemonData = await getPokemonData(pokemon.id);
+
+                const teamLocal = JSON.parse(localStorage.getItem("Equipe")) || [];
+                teamLocal.push(pokemonData);
 
                 localStorage.setItem("Equipe", JSON.stringify(teamLocal));
 
@@ -160,10 +171,11 @@ export async function ChooseFirstPokemon(){
                 containerStarter.remove();
 
                 // const textPitch = document.getElementById("container-text-pitch p");
-                const textPitch = document.getElementsByClassName(".text-pitch");
-                textPitch.innerText = "Maintenant que tu as choisi ton pokémon de départ, je te laisse t'aventurer dans le monde de pokémon ! Amuse toi !";
+                const textPitch = document.querySelector(".text-pitch");
+                textPitch.innerText = "Maintenant que tu as choisi ton Pokémon...";
                 const btnStartGame = document.createElement('button');
                 btnStartGame.setAttribute('id', 'start-game');
+                btnStartGame.innerText = "Commencer à jouer";
                 containerPitch.appendChild(btnStartGame);
 
                 document.getElementById("start-game").addEventListener("click", init);

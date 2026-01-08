@@ -26,7 +26,7 @@ export function displayPokemon (pokemonData, pokemonsList){
     criesArrayFiltered.map(crie => {
         const criePokemon = document.createElement('audio');
         criePokemon.controls = true;
-        criePokemon.volume = 0.05;
+        criePokemon.volume = 0.005;
         containerCriesPokemon.appendChild(criePokemon);
         criePokemon.src = crie;
     })

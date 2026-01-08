@@ -1,42 +1,24 @@
+import { getPokemonData } from "../api/Api.js";
 import { getSpawnedPokemons } from "../store/SpawnStore.js";
 
-export function capturePokemon(pokemonCaptured) {
+export async function capturePokemon(pokemonCaptured) {
     if(pokemonCaptured){
-        console.log("Pokémon capturé :", pokemonCaptured.nameFr);
         const team = JSON.parse(localStorage.getItem("Equipe"));
-        console.log(team.length);
-        if(team.length <= 5){
-            console.log("enregistré dans la team");
-            team.push({
-                id: pokemonCaptured.id,
-                nameFr: pokemonCaptured.nameFr
-            });
-    
+        const pokedex = JSON.parse(localStorage.getItem("Pokedex"));
+
+        const pokemon = await getPokemonData(pokemonCaptured.id);
+
+        if(team.length < 6){
+            team.push(pokemon);
             localStorage.setItem("Equipe", JSON.stringify(team));
         }else{
-            console.log("enregistré dans le pokédex");
-            const pokedex = JSON.parse(localStorage.getItem("Pokedex"));
-            pokedex.push({
-                id: pokemonCaptured.id,
-                nameFr: pokemonCaptured.nameFr
-            });
-    
+            pokedex.push(pokemon);
             localStorage.setItem("Pokedex", JSON.stringify(pokedex));
         }
+
         localStorage.setItem(
             "lastCapturedPokemon",
-            JSON.stringify({
-                id: pokemonCaptured.id,
-                name: pokemonCaptured.nameFr
-            })
+            JSON.stringify(pokemon)
         );
-
-
     }
-}
-
-export function battlePokemon(pokemon){
-    const map = document.getElementById("map");
-    const mapSave = map.outerHTML;
-    console.log(mapSave);
 }

@@ -1,4 +1,4 @@
-import { getPokemonById, getPokemonSpecies } from "../api/Api.js";
+import { getPokemonData } from "../api/Api.js";
 import { musicFight } from "../features/BackgroundMusic.js";
 import { capturePokemon } from "./CapturePokemon.js";
 
@@ -14,39 +14,27 @@ export async function randomSpawnPokemon(map, centre) {
     for (let i = 0; i < spawnCount; i++) {
         const randomId = Math.floor(Math.random() * 1025) + 1;
 
-        const [pokemon, species] = await Promise.all([
-            getPokemonById(randomId),
-            getPokemonSpecies(randomId)
-        ]);
-
-        const frenchName =
-            species.names.find(n => n.language.name === "fr")?.name ??
-            pokemon.name;
-
-        const icon = {
-            url: pokemon.sprites.front_default,
-            scaledSize: new google.maps.Size(75, 75)
-        };
+        const pokemonData = await getPokemonData(randomId);
 
         const position = {
             lat: centre.lat + (Math.random() - 0.5) * 1,
             lng: centre.lng + (Math.random() - 0.5) * 1
         };
+        const icon = {
+            url: pokemonData.sprites.front,
+            scaledSize: new google.maps.Size(75, 75)
+        };
 
         const marker = new google.maps.Marker({
             position,
             map,
-            title: frenchName,
+            title: pokemonData.nameFr,
             icon
         });
 
+
         const pokemonSpawned = {
-            id: pokemon.id,
-            nameFr: frenchName,
-            nameEn: pokemon.name,
-            icon,
-            data: pokemon,
-            crie: pokemon.cries.latest,
+            ...pokemonData,
             position,
             marker,
             captured: false
@@ -55,21 +43,43 @@ export async function randomSpawnPokemon(map, centre) {
         marker.addListener("click", () => {
             if (pokemonSpawned.captured) return;
 
+            const team = JSON.parse(localStorage.getItem("Equipe"));
+            console.log(team);
+
             const containerBattle = document.createElement("div");
             containerBattle.classList.add("container-battle");
-
             containerBattle.innerHTML = `
                 <div class="battle-screen">
                     <div class="battle-ui">
-                        <div class="pokemon-info">
-                            <p class="pokemon-name">${pokemonSpawned.nameFr}</p>
-                            <div class="hp-bar">
-                                <div class="hp-fill"></div>
+
+                        <div class="pokemon-user">
+                            <div class="pokemon-info">
+                                <p class="pokemon-name">${team[0].nameFr}</p>
+                                <p>Niveau ${team[0].level}</p>
+                                <div class="hp-bar">
+                                    <div class="hp-fill"></div>
+                                    <p>${team[0].stats.hp}/${team[0].stats.hp}</p>
+                                </div>
+                            </div>
+                            <div class="pokemon-sprite">
+                                <img src="${team[0].sprites.front}">
                             </div>
                         </div>
 
-                        <div class="pokemon-sprite">
-                            <img src="${pokemonSpawned.icon.url}">
+                        <div class="pokemon-enemy">
+                            <div class="pokemon-info">
+                                <p class="pokemon-name">${pokemonSpawned.nameFr}</p>
+                                <p>Niveau ${pokemonSpawned.level}</p>
+                                <div class="hp-bar">
+                                    <div class="hp-fill"></div>
+                                    <p>${pokemonSpawned.stats.hp}/${pokemonSpawned.stats.hp}</p>
+                                </div>
+                            </div>
+
+                            <div class="pokemon-sprite">
+                                <img src="${pokemonSpawned.sprites.front}">
+                            </div>
+
                         </div>
 
                         <div class="battle-actions">
@@ -77,7 +87,7 @@ export async function randomSpawnPokemon(map, centre) {
                             <button id="fight" class="btn fight">Vaincre</button>
                         </div>
 
-                        <audio id="bg-crie-pokemon" src="${pokemonSpawned.crie}"></audio>
+                        <audio id="bg-crie-pokemon" src="${pokemonSpawned.cries}"></audio>
                     </div>
                 </div>
             `;
@@ -89,19 +99,21 @@ export async function randomSpawnPokemon(map, centre) {
             const fightMusic = musicFight(pokemonSpawned);
 
             musicPlay.src = `./song/${fightMusic}`;
-            musicPlay.volume = 0.05;
+            musicPlay.volume = 0.005;
             musicPlay.currentTime = 0;
             musicPlay.play();
 
             // Cri du pokémon pendant le combat
             setTimeout(() => {
-                const cry = document.getElementById("bg-crie-pokemon");
-                if (!cry) return;
+                const crie = document.getElementById("bg-crie-pokemon");
+                if (!crie) return;
 
-                cry.volume = 0.10;
-                cry.currentTime = 0;
-                cry.play();
+                crie.volume = 0.05;
+                crie.currentTime = 0;
+                crie.play();
             }, 5000);
+
+
 
             // Capture
             document.getElementById("capture").addEventListener("click", () => {
@@ -117,7 +129,7 @@ export async function randomSpawnPokemon(map, centre) {
                 `;
 
                 musicPlay.src = "./song/victory.mp3";
-                musicPlay.volume = 0.05;
+                musicPlay.volume = 0.005;
                 musicPlay.currentTime = 0;
                 musicPlay.play();
 
@@ -126,7 +138,7 @@ export async function randomSpawnPokemon(map, centre) {
                 victory.addEventListener("click", () => {
                     containerBattle.remove();
                     musicPlay.src = "./song/004 New Bark Town.mp3";
-                    musicPlay.volume = 0.05;
+                    musicPlay.volume = 0.005;
                     musicPlay.currentTime = 0;
                     musicPlay.play();
                 });
@@ -141,7 +153,7 @@ export async function randomSpawnPokemon(map, centre) {
                 console.log(battleActions);
 
                 musicPlay.src = "./song/victory.mp3";
-                musicPlay.volume = 0.05;
+                musicPlay.volume = 0.005;
                 musicPlay.currentTime = 0;
                 musicPlay.play();
 
@@ -152,7 +164,7 @@ export async function randomSpawnPokemon(map, centre) {
                 `;
 
                 musicPlay.src = "./song/victory.mp3";
-                musicPlay.volume = 0.05;
+                musicPlay.volume = 0.005;
                 musicPlay.currentTime = 0;
                 musicPlay.play();
 
@@ -161,7 +173,7 @@ export async function randomSpawnPokemon(map, centre) {
                 victory.addEventListener("click", () => {
                     containerBattle.remove();
                     musicPlay.src = "./song/004 New Bark Town.mp3";
-                    musicPlay.volume = 0.001;
+                    musicPlay.volume = 0.005;
                     musicPlay.currentTime = 0;
                     musicPlay.play();
                 });

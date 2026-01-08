@@ -18,7 +18,8 @@ export function init(){
                     <form action="">
                         <input type="text" id="search-pokemon" placeholder="Rechercher un pokémon">
                     </form>
-                    <button id="logout btn">Déconnexion</button>
+                    <button class="logout" id="logout btn">Déconnexion</button>
+                    <button class="mute">Couper le volume</button>
                     <div id="pokemon-liste"></div>
                 </div>
             </div>
@@ -42,9 +43,18 @@ export function init(){
     initSearch(formsearch, pokemonsList);
     getPokemonByScroll(pokemonsList);
     capturePokemon();
-    document.getElementById("logout").addEventListener("click",() => {
+    document.querySelector(".logout").addEventListener("click",() => {
         localStorage.clear();
-        console.log('fezf');
+        window.location.reload();
+    });
+    document.querySelector(".mute").addEventListener("click",() => {
+        const musics = document.querySelectorAll("audio");
+        if(musics.length >= 1){
+            musics.forEach(music => {
+                music.volume = 0;
+            });
+            console.log("ezrfez");
+        }
     });
 }
 document.addEventListener('DOMContentLoaded', () => {

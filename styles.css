@@ -1,3 +1,6 @@
+p,a,h1,h2,h3,h4,h5{
+    font-family: 'Press Start 2P', cursive;
+}
 /* --- CONTAINER GLOBAL --- */
 .container-start-game {
     display: flex;
@@ -157,14 +160,25 @@ form input {
 
 @keyframes float {
     0% {
-        transform: translateY(0);
+        transform: translateY(4px);
     }
     50% {
-        transform: translateY(6px);
+        transform: translateY(10px);
     }
     100% {
-        transform: translateY(0);
+        transform: translateY(4px);
     }
+}
+
+.victory{
+    font-family: "Press Start 2P", monospace;
+    font-size: 10px;
+    padding: 10px;
+    border: 3px solid #333;
+    background: #eee;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #555;
 }
 
 .victory span {
@@ -295,7 +309,6 @@ form input {
 /* Actions */
 .battle-actions {
     display: grid;
-    grid-template-columns: 1fr 1fr;
     gap: 8px;
 }
 
@@ -337,5 +350,12 @@ form input {
     to {
         transform: scale(1);
         opacity: 1;
+    }
+}
+
+
+@media screen and (max-width: 1280px) {
+    #pokemon-liste{
+        grid-template-columns: repeat(2, 1fr);
     }
 }
